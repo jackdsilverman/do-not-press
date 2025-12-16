@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const https = require('https');
 const fs = require('fs');
@@ -6,8 +7,8 @@ const app = express()
 const port = 3000
 
 const options = {
-    key: fs.readFileSync('../../certificate/private-key.pem'),
-    cert: fs.readFileSync('../../certificate/certificate.pem')
+    key: fs.readFileSync(process.env.SSL_KEY_PATH),
+    cert: fs.readFileSync(process.env.SSL_CERT_PATH)
   };
 
 var counter = 0;
