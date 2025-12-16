@@ -1,28 +1,23 @@
 require('dotenv').config();
 const express = require('express')
-const https = require('https');
-const fs = require('fs');
+const serverless = require('serverless-http');
 
 const app = express()
-const port = 3000
-
-const options = {
-    key: fs.readFileSync(process.env.SSL_KEY_PATH),
-    cert: fs.readFileSync(process.env.SSL_CERT_PATH)
-  };
 
 var counter = 0;
 
-app.post('/law-button', (req, res) => {
+app.post('/button', (req, res) => {
     counter++
     res.send(`Number of times button has been pressed: ${counter}`)
 })
 
-app.post('/reset-button', (req, res) => {
+app.post('/reset', (req, res) => {
     counter = 0
     res.send(`Counter has been reset to ${counter}`)
 })
 
-https.createServer(options, app).listen(port, () => {
-    console.log(`Example app listening securely on https://localhost:${port}`);
+app.get('/count', (req, res) => {
+    res.send(`Number of times button has been pressed: ${counter}`)
 })
+
+module.exports.handler = serverless(app);
