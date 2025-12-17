@@ -1,0 +1,34 @@
+service: law-button-api
+
+provider:
+  name: aws
+  runtime: nodejs24.x
+  region: us-east-2 # Change this to your preferred AWS region
+  apiGateway:
+    apikeys:
+      - do-not-press-key
+    usagePlan:
+      quota:
+        limit: 1000 # Maximum number of requests per month
+        offset: 0
+        period: MONTH
+      throttle:
+        burstLimit: 200 # Maximum burst requests
+        rateLimit: 100  # Steady-state requests per second
+
+functions:
+  app:
+    handler: server.handler
+    events:
+      - http:
+          path: button
+          method: post
+          private: true
+      - http:
+          path: reset
+          method: post
+          private: true
+      - http:
+          path: count
+          method: get
+          private: true
